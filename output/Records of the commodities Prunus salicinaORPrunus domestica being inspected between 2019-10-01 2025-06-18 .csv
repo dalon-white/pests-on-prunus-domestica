@@ -1,0 +1,61 @@
+"","COMMODITY_ID","INSPECTION_ID","DIAGNOSTIC_EVENT_ID","QUANTITY","QUANTITY_UNITS_NAME","COMMODITY_HOST_TYPE","DISPOSITION_CODE","CBP_COMMODITY_ID_NUMBER","INITIAL_COMMODITY_DISPLAY_NAME","INITIAL_COMMODITY_TAXONOMIC_DISPLAY_NAME","INITIAL_COMMODITY_COMMON_NAME","COMMODITY_DISPLAY_NAME","COMMODITY_TAXONOMIC_DISPLAY_NAME","COMMODITY_COMMON_NAME","TAXON_SIMPLE_NAME","PROPAGATIVE_MATERIAL_TYPE","FINAL_TAXON_SIMPLE_NAME","DESTINATION_CITY","SHIPMENT_IDENTIFIER_ID","COUNTRY_OF_ORIGIN_ID","COUNTRY_OF_ORIGIN_NAME","QUARANTINE_RECOMMENDATION"
+"1","1077047",322140,NA,1,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"2","3528777",1647952,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,2714604,4522,"Ghana",NA
+"3","2080644",687856,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1438863,4267,"Hungary",NA
+"4","1999988",659933,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1369876,4497,"Germany",NA
+"5","4283363",2159533,NA,0.01,"Kilograms",NA,"DEPP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,"Seed",NA,NA,NA,4520,"United Kingdom of Great Britain and N. Ireland",NA
+"6","1077451",322192,NA,3,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"7","4358006",2206797,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,3387661,4392,"Thailand",NA
+"8","1587976",459637,NA,2,"Grams",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,972799,4479,"China",NA
+"9","1960282",647659,NA,10,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus salicina - prunus salicina","prunus salicina","prunus salicina",NA,"Unrooted Cutting",NA,NA,1339248,4334,"Netherlands","No Phytosanitary Action"
+"10","1078470",322445,NA,3,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"11","2185571",731338,NA,0.04,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1528101,4392,"Thailand",NA
+"12","2223398",749376,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1560083,4402,"Turkey",NA
+"13","2259190",771360,NA,0.08,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1590333,0,"Not Specified",NA
+"14","1191841",351195,NA,9,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,"Budwood/Graftwood (scion)",NA,NA,724647,4475,"Canada",NA
+"15","1983130",654937,NA,0.02,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1357271,4267,"Hungary",NA
+"16","3250151",1467864,NA,1.2,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,2425190,4392,"Thailand",NA
+"17","2118368",702387,NA,0.02,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1470681,4267,"Hungary",NA
+"18","1077390",322183,NA,500,"Grams",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"19","1191837",351195,NA,2,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus salicina - prunus salicina","prunus salicina","prunus salicina",NA,"Budwood/Graftwood (scion)",NA,NA,724647,4475,"Canada",NA
+"20","1078471",322446,NA,6,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"21","20499",29840,NA,0.1,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,9000,4402,"Turkey",NA
+"22","1589324",460234,NA,4,"Plant Units",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,973762,4434,"Albania",NA
+"23","3402431",1573241,NA,125,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus salicina - prunus salicina","prunus salicina","prunus salicina",NA,"Budwood/Graftwood (scion)",NA,NA,2598863,4508,"Spain",NA
+"24","1036063",314235,NA,1,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"25","1530014",435003,NA,6,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus salicina - prunus salicina","prunus salicina","prunus salicina",NA,"Budwood/Graftwood (scion)",NA,NA,918250,4334,"Netherlands","No Phytosanitary Action"
+"26","1077282",322161,NA,2,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"27","1927439",635280,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1313134,4267,"Hungary",NA
+"28","2030568",670528,NA,0.02,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1395958,4267,"Hungary",NA
+"29","1077436",322190,NA,9,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"30","1050091",316850,NA,6,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"31","911786",281629,NA,4.2,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4478,"Chile",NA
+"32","1647738",481666,NA,2,"Plant Units",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4434,"Albania",NA
+"33","1076783",322104,NA,5,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"34","1988184",656703,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1360230,4497,"Germany",NA
+"35","1078481",322448,NA,6,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"36","1077171",322147,NA,1,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"37","1076802",322113,NA,8,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"38","2372140",855375,NA,0.002,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4362,"Romania",NA
+"39","1984243",655239,NA,2,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1358047,4479,"China",NA
+"40","4288480",2162533,NA,987,"Grams",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,3336670,4262,"Hong Kong",NA
+"41","1077347",322171,NA,5,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"42","1578780",455605,NA,0.02,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4434,"Albania",NA
+"43","1074569",321477,NA,4,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"44","1833357",572762,NA,0.003,"Kilograms",NA,"DEPP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,"Seed",NA,NA,NA,4277,"Italy",NA
+"45","3546723",1660286,NA,10,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,"Budwood/Graftwood (scion)",NA,NA,2732222,4497,"Germany",NA
+"46","1117624",330521,NA,16.2,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"47","1583438",457655,NA,12,"Plant Units",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,968332,4434,"Albania",NA
+"48","18829",28412,NA,4,"Plant Units",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4434,"Albania",NA
+"49","282320",121450,NA,1,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,186537,4434,"Albania",NA
+"50","4101812",2051596,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,3201351,4520,"United Kingdom of Great Britain and N. Ireland",NA
+"51","1036069",314237,NA,10,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"52","1052601",317360,NA,1.5,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA
+"53","3652426",1733188,NA,0.07,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,2826309,4354,"Portugal",NA
+"54","1958758",646897,NA,0.1,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1338202,4520,"United Kingdom of Great Britain and N. Ireland",NA
+"55","4528098",2318854,NA,10,"Plant Units",NA,"IRMR",NA,NA,NA,NA,"prunus salicina - prunus salicina","prunus salicina","prunus salicina",NA,"Budwood/Graftwood (scion)",NA,NA,3517925,4478,"Chile",NA
+"56","19290",28798,NA,3,"Plant Units",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4402,"Turkey",NA
+"57","1995404",658826,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,1365850,4267,"Hungary",NA
+"58","3490621",1624758,NA,0.01,"Kilograms",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,2678418,4496,"Czech Republic",NA
+"59","1605076",467384,NA,5,"Plant Units",NA,NA,NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4434,"Albania",NA
+"60","1077514",322198,NA,5,"Kilograms",NA,"NTSP",NA,NA,NA,NA,"prunus domestica - prunus domestica","prunus domestica","prunus domestica",NA,NA,NA,NA,NA,4392,"Thailand",NA

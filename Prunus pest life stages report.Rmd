@@ -1,0 +1,100 @@
+---
+title: "Prunus pest life stages report"
+author: "Dalon White"
+date: "2025-06-18"
+output: html_document
+
+params:
+  commodity: ['Prunus salicina','Prunus domestica']
+  begin_date: 2019-10-01
+  end_date: 
+---
+
+put parameters into global env
+
+```{r get params}
+commodity_vec <- params$commodity
+begin_date <- params$begin_date
+end_date <- if(!is.na(params$end_date)){params$end_date} else {
+  Sys.Date()
+}
+```
+
+connect to server
+
+```{r connect to db}
+# Connect to ARM DM 2 database connection: #####
+db_conn <- dbConnect(odbc::odbc(),
+                           .connection_string =
+                             "Driver=SQL Server;
+                        Server=AAP00VA3PPQSQL0\\MSSQLSERVER,1433;
+                        Database=PPQ_AQI_ARMDMV2;        
+                        trusted_connection=yes")
+```
+
+gather commodity data
+
+```         
+```
+
+```{r get pest records}
+
+mvw_diagnostic_results <- tbl(
+  db_conn,
+  sql("select TOP 1000 * FROM [APHIS_Imports].[dbo].[mvw_Diagnostic_Results]")
+)
+
+df_diagnostic_results <- mvw_diagnostic_results %>% 
+  filter(
+    INSPECTION_DATE >= begin_date,
+    INSPECTION_DATE <= end_date,
+    DETERMINATION_TYPE == 'Final ID',
+    !is.na(PEST_TAXONOMIC_NAME)
+  )  |> 
+  filter(rowSums(across(starts_with("COMMODITY"), ~grepl(paste(commodity_vec, collapse = "|")),.)) > 0)
+  collect()
+```
+
+Below is probably not necessary if using DART's diagnostic results table, but putting it here just in case:
+
+```{r}
+get.commodity = function(connection,
+                         commodity
+) {
+  tbl(connection, sql( "SELECT
+                       *
+                       FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_BRG_COMMODITY]")) |> 
+    filter(COMMODITY_COMMON_NAME %in% commodity |
+             COMMODITY_DISPLAY_NAME %in% commodity) |>
+    dplyr::select(
+      ID,
+      INSPECTION_ID,
+      DIAGNOSTIC_EVENT_ID,
+      QUANTITY,
+      QUANTITY_UNITS_NAME,
+      COMMODITY_HOST_TYPE,
+      DISPOSITION_CODE,
+      CBP_COMMODITY_ID_NUMBER,
+      INITIAL_COMMODITY_DISPLAY_NAME,
+      INITIAL_COMMODITY_TAXONOMIC_DISPLAY_NAME,
+      INITIAL_COMMODITY_COMMON_NAME,
+      COMMODITY_DISPLAY_NAME,
+      COMMODITY_TAXONOMIC_DISPLAY_NAME,
+      COMMODITY_COMMON_NAME,
+      TAXON_SIMPLE_NAME,
+      PROPAGATIVE_MATERIAL_TYPE,
+      FINAL_TAXON_SIMPLE_NAME,
+      DESTINATION_CITY,
+      SHIPMENT_IDENTIFIER_ID,
+      DIAGNOSTIC_EVENT_ID,
+      COUNTRY_OF_ORIGIN_ID, #these aren't complete records
+      COUNTRY_OF_ORIGIN_NAME, #these aren't complete records
+      QUARANTINE_RECOMMENDATION
+    ) |> 
+    collect() |> 
+    rename('COMMODITY_ID' = 'ID')
+}
+
+commodity_df <- get.commodity(db_conn, commodity = c() )
+
+```
