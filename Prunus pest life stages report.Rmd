@@ -6,16 +6,31 @@ output: html_document
 
 params:
   commodity: ['Prunus salicina','Prunus domestica']
-  begin_date: 2019-10-01
+  begin_date: 1901-01-01
   end_date: 
 ---
+
+load packages
+
+```{r}
+#install.packages('pacman')
+pacman::p_load(odbc, tidyverse, DBI, DT, lubridate)
+```
 
 put parameters into global env
 
 ```{r get params}
+commodity_vec <- c("prunus salicina", "prunus domestica", "prunus sp.")
+begin_date <- as.Date('1901-01-01')
+end_date <- Sys.Date()
+```
+
+No clue why the params in the yaml header isn't being picked up right now, it must just be a temporary glitch:
+
+```{r get params}
 commodity_vec <- params$commodity
-begin_date <- params$begin_date
-end_date <- if(!is.na(params$end_date)){params$end_date} else {
+begin_date <- as.Date(params$begin_date)
+end_date <- if(!is.na(params$end_date)){as.Date(params$end_date)} else {
   Sys.Date()
 }
 ```
@@ -32,16 +47,17 @@ db_conn <- dbConnect(odbc::odbc(),
                         trusted_connection=yes")
 ```
 
-gather commodity data
+# ARM data
 
-```         
-```
+## The easy way
+
+Use the curated mvw_Diagnostic_Results_Current table
 
 ```{r get pest records}
 
 mvw_diagnostic_results <- tbl(
   db_conn,
-  sql("select TOP 1000 * FROM [APHIS_Imports].[dbo].[mvw_Diagnostic_Results]")
+  sql("select * FROM [APHIS_Imports].[dbo].[mvw_Diagnostic_Results]")
 )
 
 df_diagnostic_results <- mvw_diagnostic_results %>% 
@@ -50,14 +66,105 @@ df_diagnostic_results <- mvw_diagnostic_results %>%
     INSPECTION_DATE <= end_date,
     DETERMINATION_TYPE == 'Final ID',
     !is.na(PEST_TAXONOMIC_NAME)
-  )  |> 
-  filter(rowSums(across(starts_with("COMMODITY"), ~grepl(paste(commodity_vec, collapse = "|")),.)) > 0)
-  collect()
+  )  |>   collect() |>
+  filter(
+    grepl(paste(commodity_vec, collapse = "|"), tolower(COMMODITY_DISPLAY_NAME))
+    ) |>
+    filter(
+      grepl(paste(commodity_vec, collapse = "|"), tolower(COMMODITY_DISPLAY_NAME))
+           )
+
+# setwd(here::here('output'))
+# write.csv(df_diagnostic_results,
+#           paste(
+#             'Pest interception records in mvw_Diagnostic_Results on',
+#             paste(commodity_vec,collapse = 'OR'), 
+#             'between', 
+#             begin_date, 
+#             end_date, 
+#             ".csv",
+#           sep = " ")
+# )
 ```
 
-Below is probably not necessary if using DART's diagnostic results table, but putting it here just in case:
+### Also requested adding plant parts
 
-```{r}
+```{r attach plant parts data}
+get.commodity = function(connection,
+                         IDs
+) {
+  tbl(connection, sql( "SELECT
+                       *
+                       FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_BRG_COMMODITY]")) |>
+    # dplyr::select(
+    #   ID,
+    #   INSPECTION_ID,
+    #   PLANT_PARTS
+    # ) |> 
+    collect() |> 
+    rename('COMMODITY_ID' = 'ID') |> 
+    filter(COMMODITY_ID %in% IDs)
+}
+
+plant_part_records <- get.commodity(db_conn, IDs = df_diagnostic_results |> pull(ID) )
+
+commod_records <- df_diagnostic_results |> 
+  left_join(plant_part_records, by = c('ID' = 'COMMODITY_ID'))
+
+setwd(here::here('output'))
+write.csv(commod_records,
+          paste(
+            'Pest interception records in mvw_Diagnostic_Results on',
+            paste(commodity_vec,collapse = 'OR'), 
+            'between', 
+            begin_date, 
+            end_date, 
+            "in ARM",
+            ".csv",
+          sep = " ")
+)
+```
+
+# AQAS data
+
+```{r get records from AQAS}
+aqas_f309_intercept <- tbl(
+  db_conn,
+  sql("select * FROM [PPQ_AQI_AQAS_DW].[DW_AQAS].[PESTID_F309_INTERCEPT]")
+)
+
+aqas_f309_genus_records <- aqas_f309_intercept  |>  
+  filter(
+    CREATE_DT >= begin_date,
+    CREATE_DT <= end_date,
+    #filter by prunus now just so it's a smaller table (slow internet)
+    INSP_GENUS %in% "Prunus"
+  )  |>   collect() 
+
+#match by commodity_vec
+aqas_f309_species_records <- aqas_f309_genus_records |>
+  filter(
+    grepl(paste(commodity_vec, collapse = "|"), tolower(INSP_HOST)))
+
+setwd(here::here('output'))
+write.csv(aqas_f309_species_records,
+          paste(
+            'Pest interception records in F309 on',
+            paste(commodity_vec,collapse = 'OR'), 
+            'between', 
+            begin_date, 
+            end_date, 
+            "in AQAS",
+            ".csv",
+          sep = " ")
+)
+
+
+```
+
+# ARM data (the hard way)
+
+```{r get records of the commodity coming in}
 get.commodity = function(connection,
                          commodity
 ) {
@@ -92,9 +199,207 @@ get.commodity = function(connection,
       QUARANTINE_RECOMMENDATION
     ) |> 
     collect() |> 
-    rename('COMMODITY_ID' = 'ID')
+    rename('COMMODITY_ID' = 'ID') |> 
+    mutate(across(starts_with("COMMODITY"), ~tolower(.)))
 }
 
-commodity_df <- get.commodity(db_conn, commodity = c() )
+commod_records <- get.commodity(db_conn, commodity = commodity_vec )
 
+```
+
+get corresponding diagnostic results to those commodities
+
+```{r}
+get.dianostic.req = function(
+    connection){
+  tbl(connection, sql( "SELECT
+                       *
+                       FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_BRG_DIAGNOSTIC_REQUEST_ARTICLE]")) |> 
+    dplyr::select(
+      COMMODITY_ID,
+      DIAGNOSTIC_REQUEST_ID,
+      TREATMENT_SCHEDULE,
+      REGULATORY_DETERMINATION_ID) |> 
+    collect()
+}
+
+diag.req.records = get.dianostic.req(connection=db_conn
+                                     ) |> filter(
+                                       COMMODITY_ID %in% (
+                                         commod_records |> pull(COMMODITY_ID)
+                                         )
+                                       )
+
+#The BRG_DIAGNOSTIC_REQUEST_ARTICLE has COMMODITY_ID, but the FACT_DIAGNOSTIC_REQUEST does not for wahtever reason
+## Should use the bridge to get to the FACT_INSPECTION's info about num dead & alive
+get.dead.alive = function(
+    connection){
+  tbl(connection, sql( "SELECT
+                       *
+                       FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_FACT_DIAGNOSTIC_REQUEST]")) |> 
+    dplyr::select(
+      ID,
+      DIAGNOSTIC_REQUEST_NUMBER,
+      NUMBER_ALIVE_ADULTS,
+      NUMBER_ALIVE_CYSTS,
+      NUMBER_ALIVE_EGGS,
+      NUMBER_ALIVE_IMMATURE,
+      NUMBER_ALIVE_PUPAE,
+      NUMBER_DEAD_ADULTS,
+      NUMBER_DEAD_CYSTS,
+      NUMBER_DEAD_EGGS,
+      NUMBER_DEAD_IMMATURE,
+      NUMBER_DEAD_PUPAE,
+      REMARKS
+    ) |> 
+    collect()
+}
+
+dead.alive.records = get.dead.alive(connection=db_conn) |> 
+  filter(ID %in% (diag.req.records |> pull(DIAGNOSTIC_REQUEST_ID)))
+
+#attach dead alive records from FACT_DR to BRG_DR
+diag.req.records = diag.req.records |> 
+  left_join(
+    dead.alive.records,
+    by = c('DIAGNOSTIC_REQUEST_ID'='ID')
+    )
+
+get.determinations = function(connection,
+                              determ.ids) {
+  tbl(connection, sql( "SELECT
+                       *
+                       FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_BRG_DIAGNOSTIC_DETERMINATION]")) |> 
+    #    filter(ID %in% determ.ids) |> 
+    dplyr::select(
+      ID,
+      DIAGNOSTIC_REQUEST_ID,
+      PEST_TAXON_ID,
+      PEST_TAXON_SIMPLE_NAME,
+      PEST_TAXONOMIC_NAME,
+      QUARANTINE_STATUS_CONUS,
+      QUARANTINE_STATUS_HAWAII,
+      QUARANTINE_STATUS_PUERTO_RICO,
+      ID_AUTHORITY,
+      DETERMINATION_TYPE_ID,
+      DETERMINED_BY_GROUP_ID,
+      DETERMINATION_DATETIME
+    ) |> 
+    collect()
+}
+
+diag.determ.records = get.determinations(connection=db_conn#,
+                                         # determ.ids = 
+                                         #   (diag.req.records |> pull(REGULATORY_DETERMINATION_ID)
+                                         #    )
+) |> 
+  filter(ID %in% (diag.req.records |> pull(REGULATORY_DETERMINATION_ID)))
+
+#pull BRG_DIATNOSTIC_DETERMINATION_NOT_POSSIBLE_REASON table 
+## Just done to attach DIAGNOSTIC_NOT_POSSIBLE_FLAG in the event that a later molecular analysis was done but failed at a better determination (per Andy Carmichael's instructions, 8/12/24 on Teams)
+get.diag.determ.not.possible = function(connection,
+                                        determ.ids){
+  tbl(connection, sql("SELECT
+                      *
+                      FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_BRG_DIAGNOSTIC_DETERMINATION_NOT_POSSIBLE_REASON]")) |> 
+    # dplyr::filter(DIAGNOSTIC_DETERMINATION_ID %in% determ.ids) |> 
+    collect() |> 
+    dplyr::select(ID,
+                  DIAGNOSTIC_DETERMINATION_ID,
+                  DIAGNOSTIC_DETERMINATION_NOT_POSSIBLE_REASON)
+}
+
+determ.not.possible.dat = get.diag.determ.not.possible(
+  connection=db_conn#,
+  # determ.ids = (diag.determ.records |> pull(ID))
+) |>  filter(DIAGNOSTIC_DETERMINATION_ID %in% (diag.determ.records |> pull(ID)))
+
+#merge these
+diag.determ.records = diag.determ.records |> left_join(determ.not.possible.dat,
+                                                       by=c('ID'='DIAGNOSTIC_DETERMINATION_ID'))
+
+#parse the `final` determinations to the true, final determination
+parse.final.determination = function(data) {
+  data |> 
+    group_by(DIAGNOSTIC_REQUEST_ID) |> 
+    #Andy Carmichael says if that the most recent "DETERMINATION_CREATED_DATETIME" should be the most accurate, with very rare exceptions.  (The only time I can think of is if there was a molecular ID request, and it failed.)   In that case there DETERM_NOT_POSS_FLAG should be flagged.  
+    #Filter for rows that are not a failed diagnostic determination
+    dplyr::filter(is.na(DIAGNOSTIC_DETERMINATION_NOT_POSSIBLE_REASON)) |> 
+    #Filter the determination type - final has the highest TYPE_ID number
+    dplyr::filter(DETERMINATION_TYPE_ID==max(DETERMINATION_TYPE_ID)) |> 
+    #Filter for who ID'd it - the group_ID is a hierarchy of expertise, so take the max ID
+    dplyr::filter(DETERMINED_BY_GROUP_ID == max(DETERMINED_BY_GROUP_ID)) |> 
+    #The most recent is in practice the most correct - sometimes a final ID will be corrected at a later date, or someone will review for training or spot checking
+    dplyr::filter(DETERMINATION_DATETIME == max(DETERMINATION_DATETIME))
+}
+
+diag.determ.records = diag.determ.records |> parse.final.determination()
+
+#### Pull the pest taxonomy data from diagnostics ----
+get.pest.taxonomy = function(connection,
+                             pest.taxon.ids
+) {
+  tbl(connection, sql("SELECT
+                       
+                        *
+                        FROM [PPQ_AQI_ARMDMV2].[ARMDATADM].[SYS2_BRG_TAXONOMY]")) |> 
+    #    filter(ID %in% pest.taxon.ids) |>  
+    collect()
+}
+
+pest.taxonomy.records = get.pest.taxonomy(connection=db_conn) |> 
+  filter(ID %in% (diag.determ.records |> pull(PEST_TAXON_ID)
+                  )
+         )
+
+join.diagnostic.info = function(request,determ,taxonomy) {
+  request |>
+    left_join(determ,by=c('DIAGNOSTIC_REQUEST_ID'='DIAGNOSTIC_REQUEST_ID'),relationship='many-to-many')|> 
+    left_join(taxonomy,by=c('PEST_TAXON_ID'='ID')) 
+}
+
+diag.info = join.diagnostic.info(request = diag.req.records,
+                                 determ = diag.determ.records,
+                                 taxonomy = pest.taxonomy.records) |> 
+  mutate(COMMODITY_ID = as.character(COMMODITY_ID))
+
+#use inner join to drop any commodity records that did not show up having a pest
+complete.records = commod_records |> inner_join(diag.info,
+                                                by='COMMODITY_ID') |> 
+  filter(!is.na(PEST_TAXON_ID)) |> ungroup()
+```
+
+view results
+
+```{r}
+#number of commodity inspections with a diagnostic determination
+complete.records
+
+#times the commodity was inspected
+commod_records
+```
+
+```{r save records}
+setwd(here::here('output'))
+write.csv(complete.records,
+          paste(
+            'Pest interception records on',
+            paste(commodity_vec,collapse = 'OR'), 
+            'between', 
+            begin_date, 
+            end_date, 
+            ".csv",
+          sep = " ")
+)
+
+write.csv(commod_records,
+          paste(
+            'Records of the commodities',
+            paste(commodity_vec,collapse = 'OR'), 
+            'being inspected between', 
+            begin_date, 
+            end_date, 
+            ".csv",
+          sep = " ")
+)
 ```
